@@ -8,12 +8,28 @@
 import sys
 import tkinter as tk
 import tkinter.ttk as ttk
+import tkinter.font as tkFont
 from tkinter.constants import *
 import os.path
 
 _location = os.path.dirname(__file__)
 
 import main
+
+
+def init(win):
+    main.passWindowInstance(win)
+    displayCOMPort()
+
+
+def displayCOMPort():
+    main.displayCOMPort()
+
+def connectUART():
+    main.connectUART()
+
+
+font_console = ""
 
 _bgcolor = 'SystemButtonFace'
 _fgcolor = 'SystemWindowText'
@@ -47,6 +63,12 @@ class Toplevel1:
         top.title("EtherCAN Sniffer Client v1.0")
         top.configure(highlightcolor="SystemWindowText")
 
+        font_console = tkFont.Font(
+            family="BIZ UDゴシック",
+            size=10,
+            weight="normal"
+        )
+
         self.top = top
         self.connection_comPort_var = tk.StringVar()
         self.send_data1_type_var = tk.StringVar()
@@ -73,10 +95,16 @@ class Toplevel1:
         self.connection_frame.configure(relief='')
         self.connection_frame.configure(text='''接続''')
 
-        self.connection_btn = ttk.Button(self.connection_frame)
+        self.connection_btn = ttk.Button(self.connection_frame, command=connectUART)
         self.connection_btn.place(relx=0.764, rely=0.538, height=26, width=105
                 , bordermode='ignore')
         self.connection_btn.configure(text='''接続''')
+        self.connection_btn.configure(compound='left')
+
+        self.connection_btn = ttk.Button(self.connection_frame, command=displayCOMPort)
+        self.connection_btn.place(relx=0.764, rely=0.200, height=26, width=105
+                , bordermode='ignore')
+        self.connection_btn.configure(text='''再取得''')
         self.connection_btn.configure(compound='left')
 
         self.connection_text = ttk.Label(self.connection_frame)
@@ -99,7 +127,6 @@ class Toplevel1:
                 , relwidth=0.484)
         self.send_frame.configure(relief='')
         self.send_frame.configure(text='''送信''')
-        self.send_frame.configure(cursor="fleur")
 
         self.send_phIndex_entry = ttk.Entry(self.send_frame)
         self.send_phIndex_entry.place(relx=0.367, rely=0.226, relheight=0.087
@@ -206,7 +233,7 @@ class Toplevel1:
         self.send_data6_entry.place(relx=0.653, rely=0.453, relheight=0.087
                 , relwidth=0.094, bordermode='ignore')
         self.send_data6_entry.configure(takefocus="")
-        self.send_data6_entry.configure(cursor="fleur")
+        self.send_data6_entry.configure(cursor="ibeam")
 
         self.send_data7_entry = ttk.Entry(self.send_frame)
         self.send_data7_entry.place(relx=0.776, rely=0.453, relheight=0.087
@@ -297,7 +324,7 @@ class Toplevel1:
         self.send_sendMode_text.configure(relief="flat")
         self.send_sendMode_text.configure(text='''送信モード(模倣するパケットの流れ)''')
         self.send_sendMode_text.configure(compound='left')
-        self.send_sendMode_text.configure(cursor="fleur")
+        self.send_sendMode_text.configure(cursor="ibeam")
 
         self.send_data1_type_pulldown = ttk.Combobox(self.send_frame)
         self.send_data1_type_pulldown.place(relx=0.041, rely=0.566
@@ -307,7 +334,6 @@ class Toplevel1:
         self.send_data1_type_pulldown.configure(state='readonly')
         self.send_data1_type_pulldown.configure(textvariable=self.send_data1_type_var)
         self.send_data1_type_pulldown.configure(takefocus="")
-        self.send_data1_type_pulldown.configure(cursor="fleur")
 
         self.send_data2_type_pulldown = ttk.Combobox(self.send_frame)
         self.send_data2_type_pulldown.place(relx=0.163, rely=0.566
@@ -353,7 +379,6 @@ class Toplevel1:
         self.send_data6_type_pulldown.configure(state='readonly')
         self.send_data6_type_pulldown.configure(textvariable=self.send_data6_type_var)
         self.send_data6_type_pulldown.configure(takefocus="")
-        self.send_data6_type_pulldown.configure(cursor="fleur")
 
         self.send_data7_type_pulldown = ttk.Combobox(self.send_frame)
         self.send_data7_type_pulldown.place(relx=0.776, rely=0.566
@@ -371,7 +396,6 @@ class Toplevel1:
         self.send_sendMode_pulldown.configure(values=self.value_list)
         self.send_sendMode_pulldown.configure(textvariable=self.send_sendMode_var)
         self.send_sendMode_pulldown.configure(takefocus="")
-        self.send_sendMode_pulldown.configure(cursor="fleur")
 
         self.receive_frame = ttk.Labelframe(self.top)
         self.receive_frame.place(relx=0.01, rely=0.172, relheight=0.814
@@ -420,7 +444,7 @@ class Toplevel1:
         self.receive_log_text.place(relx=0.021, rely=0.045, relheight=0.805
                 , relwidth=0.948, bordermode='ignore')
         self.receive_log_text.configure(background="white")
-        self.receive_log_text.configure(font="TkTextFont")
+        self.receive_log_text.configure(font=font_console)
         self.receive_log_text.configure(highlightcolor="SystemWindowText")
         self.receive_log_text.configure(selectbackground="#d9d9d9")
         self.receive_log_text.configure(selectforeground="black")
@@ -463,7 +487,6 @@ class Toplevel1:
         self.preset_rename_btn.configure(takefocus="")
         self.preset_rename_btn.configure(text='''名前変更''')
         self.preset_rename_btn.configure(compound='left')
-        self.preset_rename_btn.configure(cursor="fleur")
 
         self.preset_clone_btn = ttk.Button(self.preset_frame)
         self.preset_clone_btn.place(relx=0.776, rely=0.549, height=25, width=96
@@ -505,13 +528,15 @@ class Toplevel1:
         self.preset_preset_list.place(relx=0.02, rely=0.078, relheight=0.855
                 , relwidth=0.498, bordermode='ignore')
         self.preset_preset_list.configure(background="white")
-        self.preset_preset_list.configure(cursor="fleur")
         self.preset_preset_list.configure(disabledforeground="#b4b4b4")
         self.preset_preset_list.configure(font="TkFixedFont")
         self.preset_preset_list.configure(foreground="SystemWindowText")
         self.preset_preset_list.configure(highlightcolor="SystemWindowText")
         self.preset_preset_list.configure(selectbackground="#d9d9d9")
         self.preset_preset_list.configure(selectforeground="black")
+
+        init(self)
+
 
 def start_up():
     main.main()

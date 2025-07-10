@@ -74,26 +74,26 @@ proc vTclWindow.top1 {base} {
     wm title $top $toptitle
     namespace eval ::widgets::${top}::ClassOption {}
     set ::widgets::${top}::ClassOption(-toptitle) $toptitle
-    vTcl:DefineAlias "$top" "Toplevel1" vTcl:Toplevel:WidgetProc "" 1
+    vTcl:DefineAlias "$top" "Toplevel1" vTcl:Toplevel:WidgetProc "" True
     set vTcl(real_top) {}
     menu "$top.m52" \
         -activebackground #d9d9d9 -activeforeground black \
         -font "-family {Yu Gothic UI} -size 9" -tearoff 0 
     ::vTcl::widgets::ttk::labelframe::createCmd "$top.tLa51" \
         -text "接続" -width 484 -height 75 
-    vTcl:DefineAlias "$top.tLa51" "connection_frame" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$top.tLa51" "connection_frame" vTcl:WidgetProc "Toplevel1" True
     set site_3_0 $top.tLa51
     ttk::button "$site_3_0.tBu53" \
         -text "接続" -compound left 
-    vTcl:DefineAlias "$site_3_0.tBu53" "connection_btn" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tBu53" "connection_btn" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa55" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat -text "COMポート" \
         -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa55" "connection_text" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa55" "connection_text" vTcl:WidgetProc "Toplevel1" True
     ttk::combobox "$site_3_0.tCo54" \
         -font "-family {Yu Gothic UI} -size 9" -state readonly \
         -textvariable "connection_comPort_var" 
-    vTcl:DefineAlias "$site_3_0.tCo54" "connection_pulldown" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tCo54" "connection_pulldown" vTcl:WidgetProc "Toplevel1" True
     place $site_3_0.tBu53 \
         -in $site_3_0 -x 0 -relx 0.764 -y 0 -rely 0.533 -width 105 \
         -relwidth 0 -height 26 -relheight 0 -anchor nw -bordermode ignore 
@@ -107,139 +107,139 @@ proc vTclWindow.top1 {base} {
         -bordermode ignore 
     ::vTcl::widgets::ttk::labelframe::createCmd "$top.tLa68" \
         -text "送信" -width 490 -height 255 
-    vTcl:DefineAlias "$top.tLa68" "send_frame" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$top.tLa68" "send_frame" vTcl:WidgetProc "Toplevel1" True
     set site_3_0 $top.tLa68
     ttk::entry "$site_3_0.tEn73" \
         -font "-family {Yu Gothic UI} -size 9" -cursor ibeam 
-    vTcl:DefineAlias "$site_3_0.tEn73" "send_phIndex_entry" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tEn73" "send_phIndex_entry" vTcl:WidgetProc "Toplevel1" True
     ttk::entry "$site_3_0.tEn74" \
         -font "-family {Yu Gothic UI} -size 9" -cursor ibeam 
-    vTcl:DefineAlias "$site_3_0.tEn74" "send_phEntry_entry" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tEn74" "send_phEntry_entry" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa77" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat -text "Entry" \
         -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa77" "send_phEntry_text" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa77" "send_phEntry_text" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa76" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat -text "Index" \
         -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa76" "send_phIndex_text" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa76" "send_phIndex_text" vTcl:WidgetProc "Toplevel1" True
     ttk::entry "$site_3_0.tEn69" \
         -font "-family {Yu Gothic UI} -size 9" -cursor ibeam 
-    vTcl:DefineAlias "$site_3_0.tEn69" "send_unitCode_entry" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tEn69" "send_unitCode_entry" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa70" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat -text "Unit Code" \
         -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa70" "send_unitCode_text" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa70" "send_unitCode_text" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa75" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat -text "Unit ID" \
         -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa75" "send_unitId_text" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa75" "send_unitId_text" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa47" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat \
         -text "Payload Header" -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa47" "TLabel1" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa47" "TLabel1" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa52" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat -text "Address" \
         -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa52" "TLabel2" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa52" "TLabel2" vTcl:WidgetProc "Toplevel1" True
     ttk::separator "$site_3_0.tSe50" \
         -orient vertical 
-    vTcl:DefineAlias "$site_3_0.tSe50" "send_upper_sep" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tSe50" "send_upper_sep" vTcl:WidgetProc "Toplevel1" True
     ttk::entry "$site_3_0.tEn47" \
         -font "-family {Yu Gothic UI} -size 9" -cursor ibeam 
-    vTcl:DefineAlias "$site_3_0.tEn47" "send_data1_entry" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tEn47" "send_data1_entry" vTcl:WidgetProc "Toplevel1" True
     ttk::entry "$site_3_0.tEn48" \
         -font "-family {Yu Gothic UI} -size 9" -cursor ibeam 
-    vTcl:DefineAlias "$site_3_0.tEn48" "send_data2_entry" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tEn48" "send_data2_entry" vTcl:WidgetProc "Toplevel1" True
     ttk::entry "$site_3_0.tEn49" \
         -font "-family {Yu Gothic UI} -size 9" -cursor ibeam 
-    vTcl:DefineAlias "$site_3_0.tEn49" "send_data3_entry" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tEn49" "send_data3_entry" vTcl:WidgetProc "Toplevel1" True
     ttk::entry "$site_3_0.tEn50" \
         -font "-family {Yu Gothic UI} -size 9" -cursor ibeam 
-    vTcl:DefineAlias "$site_3_0.tEn50" "send_data4_entry" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tEn50" "send_data4_entry" vTcl:WidgetProc "Toplevel1" True
     ttk::entry "$site_3_0.tEn51" \
         -font "-family {Yu Gothic UI} -size 9" -cursor ibeam 
-    vTcl:DefineAlias "$site_3_0.tEn51" "send_data5_entry" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tEn51" "send_data5_entry" vTcl:WidgetProc "Toplevel1" True
     ttk::entry "$site_3_0.tEn52" \
         -font "-family {Yu Gothic UI} -size 9" -cursor fleur 
-    vTcl:DefineAlias "$site_3_0.tEn52" "send_data6_entry" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tEn52" "send_data6_entry" vTcl:WidgetProc "Toplevel1" True
     ttk::entry "$site_3_0.tEn53" \
         -font "-family {Yu Gothic UI} -size 9" -cursor ibeam 
-    vTcl:DefineAlias "$site_3_0.tEn53" "send_data7_entry" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tEn53" "send_data7_entry" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa54" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat -text "Data[1]" \
         -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa54" "send_data1_text" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa54" "send_data1_text" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa57" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat -text "Data[2]" \
         -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa57" "send_data2_text" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa57" "send_data2_text" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa58" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat -text "Data[3]" \
         -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa58" "send_data3_text" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa58" "send_data3_text" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa59" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat -text "Data[4]" \
         -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa59" "send_data4_text" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa59" "send_data4_text" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa60" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat -text "Data[5]" \
         -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa60" "send_data5_text" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa60" "send_data5_text" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa61" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat -text "Data[6]" \
         -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa61" "send_data6_text" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa61" "send_data6_text" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa62" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat -text "Data[7]" \
         -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa62" "send_data7_text" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa62" "send_data7_text" vTcl:WidgetProc "Toplevel1" True
     ttk::button "$site_3_0.tBu72" \
         -text "送信" -compound left 
-    vTcl:DefineAlias "$site_3_0.tBu72" "send_send_btn" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tBu72" "send_send_btn" vTcl:WidgetProc "Toplevel1" True
     ttk::button "$site_3_0.tBu73" \
         -text "クリア" -compound left 
-    vTcl:DefineAlias "$site_3_0.tBu73" "send_clear_btn" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tBu73" "send_clear_btn" vTcl:WidgetProc "Toplevel1" True
     ttk::entry "$site_3_0.tEn72" \
         -font "-family {Yu Gothic UI} -size 9" -cursor ibeam 
-    vTcl:DefineAlias "$site_3_0.tEn72" "send_unitId_entry" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tEn72" "send_unitId_entry" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa78" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat \
         -text "送信モード(模倣するパケットの流れ)" -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa78" "send_sendMode_text" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa78" "send_sendMode_text" vTcl:WidgetProc "Toplevel1" True
     ttk::combobox "$site_3_0.tCo64" \
         -values "DEC BIN HEX" -font "-family {Yu Gothic UI} -size 9" \
         -state readonly -textvariable "send_data1_type_var" 
-    vTcl:DefineAlias "$site_3_0.tCo64" "send_data1_type_pulldown" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tCo64" "send_data1_type_pulldown" vTcl:WidgetProc "Toplevel1" True
     ttk::combobox "$site_3_0.tCo65" \
         -values "DEC BIN HEX {}" -font "-family {Yu Gothic UI} -size 9" \
         -state readonly -textvariable "send_data2_type_var" 
-    vTcl:DefineAlias "$site_3_0.tCo65" "send_data2_type_pulldown" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tCo65" "send_data2_type_pulldown" vTcl:WidgetProc "Toplevel1" True
     ttk::combobox "$site_3_0.tCo67" \
         -values "DEC BIN HEX {}" -font "-family {Yu Gothic UI} -size 9" \
         -state readonly -textvariable "send_data3_type_var" 
-    vTcl:DefineAlias "$site_3_0.tCo67" "send_data3_type_pulldown" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tCo67" "send_data3_type_pulldown" vTcl:WidgetProc "Toplevel1" True
     ttk::combobox "$site_3_0.tCo68" \
         -values "DEC BIN HEX {}" -font "-family {Yu Gothic UI} -size 9" \
         -state readonly -textvariable "send_data4_type_var" 
-    vTcl:DefineAlias "$site_3_0.tCo68" "send_data4_type_pulldown" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tCo68" "send_data4_type_pulldown" vTcl:WidgetProc "Toplevel1" True
     ttk::combobox "$site_3_0.tCo69" \
         -values "DEC BIN HEX {}" -font "-family {Yu Gothic UI} -size 9" \
         -state readonly -textvariable "send_data5_type_var" 
-    vTcl:DefineAlias "$site_3_0.tCo69" "send_data5_type_pulldown" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tCo69" "send_data5_type_pulldown" vTcl:WidgetProc "Toplevel1" True
     ttk::combobox "$site_3_0.tCo70" \
         -values "DEC BIN HEX {}" -font "-family {Yu Gothic UI} -size 9" \
         -state readonly -textvariable "send_data6_type_var" 
-    vTcl:DefineAlias "$site_3_0.tCo70" "send_data6_type_pulldown" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tCo70" "send_data6_type_pulldown" vTcl:WidgetProc "Toplevel1" True
     ttk::combobox "$site_3_0.tCo71" \
         -values "DEC BIN HEX {}" -font "-family {Yu Gothic UI} -size 9" \
         -state readonly -textvariable "send_data7_type_var" 
-    vTcl:DefineAlias "$site_3_0.tCo71" "send_data7_type_pulldown" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tCo71" "send_data7_type_pulldown" vTcl:WidgetProc "Toplevel1" True
     ttk::combobox "$site_3_0.tCo74" \
         -values "{Main -> Unit} {Unit -> Main} {Sniffer -> Main}" \
         -font "-family {Yu Gothic UI} -size 9" \
         -textvariable "send_sendMode_var" 
-    vTcl:DefineAlias "$site_3_0.tCo74" "send_sendMode_pulldown" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tCo74" "send_sendMode_pulldown" vTcl:WidgetProc "Toplevel1" True
     place $site_3_0.tEn73 \
         -in $site_3_0 -x 0 -relx 0.367 -y 0 -rely 0.226 -width 56 -relwidth 0 \
         -height 23 -relheight 0 -anchor nw -bordermode ignore 
@@ -372,25 +372,25 @@ proc vTclWindow.top1 {base} {
         -bordermode ignore 
     ::vTcl::widgets::ttk::labelframe::createCmd "$top.tLa56" \
         -text "受信" -width 480 -height 441 
-    vTcl:DefineAlias "$top.tLa56" "receive_frame" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$top.tLa56" "receive_frame" vTcl:WidgetProc "Toplevel1" True
     set site_3_0 $top.tLa56
     ttk::checkbutton "$site_3_0.tCh63" \
         -variable "tch63" -text "タイムスタンプを表示" -compound left 
-    vTcl:DefineAlias "$site_3_0.tCh63" "receive_showTimeStamp_chk" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tCh63" "receive_showTimeStamp_chk" vTcl:WidgetProc "Toplevel1" True
     ttk::checkbutton "$site_3_0.tCh64" \
         -variable "tch64" -text "UnitCodeの自動変換" -compound left 
-    vTcl:DefineAlias "$site_3_0.tCh64" "receive_unitCodeConv_chk" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tCh64" "receive_unitCodeConv_chk" vTcl:WidgetProc "Toplevel1" True
     ttk::button "$site_3_0.tBu65" \
         -text "クリア" -compound left 
-    vTcl:DefineAlias "$site_3_0.tBu65" "receive_logClear_btn" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tBu65" "receive_logClear_btn" vTcl:WidgetProc "Toplevel1" True
     ttk::label "$site_3_0.tLa67" \
         -font "-family {Yu Gothic UI} -size 9" -relief flat -text "Dataの表示形式" \
         -compound left 
-    vTcl:DefineAlias "$site_3_0.tLa67" "receive_dataFormat_text" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tLa67" "receive_dataFormat_text" vTcl:WidgetProc "Toplevel1" True
     ttk::combobox "$site_3_0.tCo66" \
         -values "DEC BIN HEX {}" -font "-family {Yu Gothic UI} -size 9" \
         -state readonly -textvariable "receive_dataFormat_var" 
-    vTcl:DefineAlias "$site_3_0.tCo66" "receive_dataFormat_pulldown" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tCo66" "receive_dataFormat_pulldown" vTcl:WidgetProc "Toplevel1" True
     text "$site_3_0.tex60" \
         -background white -font "-family {Yu Gothic UI} -size 9" \
         -foreground SystemWindowText -height 334 \
@@ -398,7 +398,7 @@ proc vTclWindow.top1 {base} {
         -selectforeground black -width 455 -wrap word 
     $site_3_0.tex60 configure -font "TkTextFont"
     $site_3_0.tex60 insert end text
-    vTcl:DefineAlias "$site_3_0.tex60" "receive_log_text" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tex60" "receive_log_text" vTcl:WidgetProc "Toplevel1" True
     place $site_3_0.tCh63 \
         -in $site_3_0 -x 0 -relx 0.021 -y 0 -rely 0.867 -width 0 \
         -relwidth 0.333 -height 0 -relheight 0.051 -anchor nw \
@@ -424,38 +424,38 @@ proc vTclWindow.top1 {base} {
         -bordermode ignore 
     ttk::separator "$top.tSe49" \
         -orient vertical 
-    vTcl:DefineAlias "$top.tSe49" "top_mid_sep" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$top.tSe49" "top_mid_sep" vTcl:WidgetProc "Toplevel1" True
     ::vTcl::widgets::ttk::labelframe::createCmd "$top.tLa80" \
         -text "プリセット" -width 490 -height 255 
-    vTcl:DefineAlias "$top.tLa80" "preset_frame" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$top.tLa80" "preset_frame" vTcl:WidgetProc "Toplevel1" True
     set site_3_0 $top.tLa80
     ttk::button "$site_3_0.tBu84" \
         -text "送信" -compound left 
-    vTcl:DefineAlias "$site_3_0.tBu84" "preset_send_btn" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tBu84" "preset_send_btn" vTcl:WidgetProc "Toplevel1" True
     ttk::button "$site_3_0.tBu82" \
         -text "保存" -compound left 
-    vTcl:DefineAlias "$site_3_0.tBu82" "preset_save_btn" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tBu82" "preset_save_btn" vTcl:WidgetProc "Toplevel1" True
     ttk::button "$site_3_0.tBu83" \
         -text "読み出し" -compound left 
-    vTcl:DefineAlias "$site_3_0.tBu83" "preset_load_btn" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tBu83" "preset_load_btn" vTcl:WidgetProc "Toplevel1" True
     ttk::button "$site_3_0.tBu86" \
         -text "名前変更" -compound left 
-    vTcl:DefineAlias "$site_3_0.tBu86" "preset_rename_btn" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tBu86" "preset_rename_btn" vTcl:WidgetProc "Toplevel1" True
     ttk::button "$site_3_0.tBu87" \
         -text "複製" -compound left 
-    vTcl:DefineAlias "$site_3_0.tBu87" "preset_clone_btn" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tBu87" "preset_clone_btn" vTcl:WidgetProc "Toplevel1" True
     ttk::button "$site_3_0.tBu88" \
         -text "削除" -compound left 
-    vTcl:DefineAlias "$site_3_0.tBu88" "preset_delete_btn" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tBu88" "preset_delete_btn" vTcl:WidgetProc "Toplevel1" True
     ttk::button "$site_3_0.tBu89" \
         -text "エクスポート" -compound left 
-    vTcl:DefineAlias "$site_3_0.tBu89" "preset_bankExport_btn" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tBu89" "preset_bankExport_btn" vTcl:WidgetProc "Toplevel1" True
     ttk::button "$site_3_0.tBu90" \
         -text "インポート" -compound left 
-    vTcl:DefineAlias "$site_3_0.tBu90" "preset_bankImport_btn" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tBu90" "preset_bankImport_btn" vTcl:WidgetProc "Toplevel1" True
     ttk::checkbutton "$site_3_0.tCh85" \
         -variable "preset_quickSend_var" -text "プリセット選択で即送信" -compound left 
-    vTcl:DefineAlias "$site_3_0.tCh85" "preset_quickSend_chk" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.tCh85" "preset_quickSend_chk" vTcl:WidgetProc "Toplevel1" True
     listbox "$site_3_0.lis81" \
         -background white -disabledforeground #b4b4b4 \
         -font "-family {ＭＳ ゴシック} -size 10" -foreground SystemWindowText \
@@ -463,7 +463,7 @@ proc vTclWindow.top1 {base} {
         -selectbackground #d9d9d9 -selectforeground black -width 244 
     $site_3_0.lis81 configure -font "TkFixedFont"
     $site_3_0.lis81 insert end text
-    vTcl:DefineAlias "$site_3_0.lis81" "preset_preset_list" vTcl:WidgetProc "Toplevel1" 1
+    vTcl:DefineAlias "$site_3_0.lis81" "preset_preset_list" vTcl:WidgetProc "Toplevel1" True
     place $site_3_0.tBu84 \
         -in $site_3_0 -x 0 -relx 0.551 -y 0 -rely 0.082 -width 96 -relwidth 0 \
         -height 45 -relheight 0 -anchor nw -bordermode ignore 
@@ -518,7 +518,7 @@ proc vTclWindow.top1 {base} {
     vTcl:FireEvent $base <<Ready>>
 }
 
-proc 36 {args} {return 1}
+proc dummyProc36 {args} {return 1}
 
 
 Window show .

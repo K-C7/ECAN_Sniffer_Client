@@ -1,0 +1,25 @@
+invalid command name "1"
+    while executing
+"1"
+    (procedure "vTclWindow.top1" line 83)
+    invoked from within
+"vTclWindow.top1 .top1 "
+    ("eval" body line 1)
+    invoked from within
+"eval "vTclWindow$name $newname $rest""
+    (procedure "Window" line 18)
+    invoked from within
+"Window show .top1 $btop1"
+    (file "C:/Users/Shiina/Projects/ECAN_Sniffer_Client/PAGE/main_07101900.tcl" line 533)
+    invoked from within
+"source C:/Users/Shiina/Projects/ECAN_Sniffer_Client/PAGE/main_07101900.tcl"
+    ("uplevel" body line 1)
+    invoked from within
+"uplevel #0 [list source $file]"
+    (procedure "vTcl:source" line 28)
+    invoked from within
+"vTcl:source $file newprocs"
+    (procedure "vTcl:open" line 116)
+    invoked from within
+"vTcl:open"
+    (menu invoke)

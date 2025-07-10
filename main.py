@@ -6,13 +6,33 @@
 #    Jul 10, 2025 07:37:21 PM JST  platform: Windows NT
 
 import sys
+import os
+import threading
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter.constants import *
 
 import ui
 
+import serial
+import serial.tools.list_ports
+
 _debug = True # False to eliminate debug printing from callback functions.
+
+serialPort = ''
+
+portDeviceNameList = []
+portNumberList = []
+portIdx = 0
+
+win = ''
+
+IS_SNIFFERING = 0
+
+LOG_LEVEL_ERR = 0
+LOG_LEVEL_WARN = 1
+LOG_LEVEL_DATA = 2
+LOG_LEVEL_INFO = 3
 
 def main(*args):
     '''Main entry point for the application.'''
@@ -23,11 +43,110 @@ def main(*args):
     global _top1, _w1
     _top1 = root
     _w1 = ui.Toplevel1(_top1)
+
+    # init()
+
     root.mainloop()
 
 if __name__ == '__main__':
     ui.start_up()
 
+# def init():
+
+def passWindowInstance(win_instance):
+    global win
+    win = win_instance
+
+def displayCOMPort():
+    global portDeviceNameList, portNumberList
+
+    portDeviceNameList = []
+    portNumberList = []
+
+    for port in serial.tools.list_ports.comports():
+        portDeviceNameList.append(port.description)
+        portNumberList.append(port.device)
+    
+    win.connection_pulldown["values"] = portDeviceNameList
+    win.connection_pulldown.set(portDeviceNameList[0])
 
 
+def connectUART():
+    global portDeviceNameList, portIdx, serialPort
+
+    disconnectUART()
+
+    portIdx = -1
+    selectedPort = win.connection_pulldown.get()
+    
+    for i in range(len(portDeviceNameList)):
+        if(portDeviceNameList[i] == selectedPort):
+            portIdx = i
+
+    try:
+        serialPort = serial.Serial(
+            portNumberList[portIdx],
+            115200,
+            timeout=3
+        )
+
+        printLog("{0}に接続しました。".format(portNumberList[portIdx]))
+        startSniffering()
+    except:
+        printLog("{0}への接続に失敗しました。".format(portNumberList[portIdx]), LOG_LEVEL_ERR)
+
+
+def disconnectUART():
+    try:
+        serialPort.close()
+        printLog("{0}との接続を切断しました。".format(portNumberList[portIdx]), LOG_LEVEL_INFO)
+    except:
+        pass
+
+    stopSniffering()
+
+
+def thread_UART_read():
+    global serialPort, IS_SNIFFERING
+
+    while(IS_SNIFFERING):
+        if(serialPort != ''):
+            line = serialPort.readline()
+            line = line.strip()
+            line = line.decode("utf-8")
+
+            printLog(line, LOG_LEVEL_DATA)
+
+
+def startSniffering():
+    global IS_SNIFFERING
+
+    thread_1 = threading.Thread(target=thread_UART_read)
+    IS_SNIFFERING = 1
+    thread_1.start()
+
+def stopSniffering():
+    IS_SNIFFERING = 0
+
+
+def printLog(line, level=3):
+    if(line == ''):
+        return
+
+    win.receive_log_text.config(state="normal")
+
+    if(level == 0):
+        win.receive_log_text.insert(tk.END, "[ERR]  ")
+    elif(level == 1):
+        win.receive_log_text.insert(tk.END, "[WARN] ")
+    elif(level == 2):
+        win.receive_log_text.insert(tk.END, "[DATA] ")
+    elif(level == 3):
+        win.receive_log_text.insert(tk.END, "[INFO] ")
+    else:
+        win.receive_log_text.insert(tk.END, "[MISC] ")
+
+    win.receive_log_text.insert(tk.END, line + "\n")
+    win.receive_log_text.config(state="disabled")
+    win.receive_log_text.see(tk.END)
 
