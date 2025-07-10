@@ -1,0 +1,25 @@
+PAGE
+    Toplevel: Toplevel 0
+        Menubar
+        TSeparator: TSeparator1  
+        TLabelframe: connection_frame  
+            TCombobox: connection_pulldown  
+            TButton: connection_btn  
+            TLabel: connection_text  
+        TLabelframe: receive_frame  
+            Text: receive_log_text  
+            TCheckbutton: receive_showTimeStamp_chk  
+            TCheckbutton: receive_unitCodeConv_chk  
+            TButton: receive_logClear_btn  
+            TCombobox: receive_dataFormat_pulldown  
+            TLabel: receive_dataFormat_text  
+        TLabelframe: send_frame  
+            TEntry: send_unitCode_entry  
+            TEntry: send_unitId_entry  
+            TEntry: send_phIndex_entry  
+            TEntry: send_phEntry_entry  
+            TLabel: send_unitCode_text  
+            TLabel: send_phIndex_text  
+            TLabel: send_phEntry_text  
+            TLabel: send_unitId_text  
+
