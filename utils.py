@@ -20,4 +20,3 @@ def ecan_addrToCodeId(addr):
     ism = addr & 0b00000000001
 
     return unitCode, unitId, ism
-

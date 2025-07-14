@@ -27,6 +27,9 @@ portIdx = 0
 
 win = ''
 
+win_title = "EtherCAN Sniffer Client"
+win_version = "v1.0"
+
 IS_SNIFFERING = 0
 
 LOG_LEVEL_ERR = 0
@@ -53,9 +56,18 @@ if __name__ == '__main__':
 
 # def init():
 
+
+def changeWindowSubTitle(sub=None):
+    if(sub == None):
+        root.title("{0} {1}".format(win_title, win_version))
+    else:    
+        root.title("{0} {1} - {2}".format(win_title, win_version, sub))
+
+
 def passWindowInstance(win_instance):
     global win
     win = win_instance
+
 
 def displayCOMPort():
     global portDeviceNameList, portNumberList
@@ -75,6 +87,7 @@ def connectUART():
     global portDeviceNameList, portIdx, serialPort
 
     disconnectUART()
+    changeWindowSubTitle("COMポート未接続")
 
     portIdx = -1
     selectedPort = win.connection_pulldown.get()
@@ -91,6 +104,7 @@ def connectUART():
         )
 
         printLog("{0}に接続しました。".format(portNumberList[portIdx]))
+        changeWindowSubTitle("COMポート接続済み")
         startSniffering()
     except:
         printLog("{0}への接続に失敗しました。".format(portNumberList[portIdx]), LOG_LEVEL_ERR)
@@ -115,7 +129,37 @@ def thread_UART_read():
             line = line.strip()
             line = line.decode("utf-8")
 
-            printLog(line, LOG_LEVEL_DATA)
+            # printLog(line, LOG_LEVEL_DATA)
+            if(line[0] == "C"):
+                printLogCAN(line)
+
+
+def printLogCAN(data_raw):
+    line = "CAN "
+    data = data_raw.split()
+
+    if(data[1] == "R"):
+        line += "RX "
+    else:
+        line += "TX "
+    
+    line += "Code:{0} ".format(data[2])
+    line += "Id:{0} ".format(data[3])
+    line += "ISM:{0} ".format(data[4])
+    line += "| Index:{0} ".format(data[6])
+    line += "Entry:{0} ".format(data[7])
+    line += "|"
+
+    for i in range(int(data[5]) - 1):
+        line += " 0d{0}".format(data[8 + i])
+    
+    printLog(line, LOG_LEVEL_DATA)
+
+
+def clearLog():
+    win.receive_log_text.config(state="normal")
+    win.receive_log_text.delete(1.0, tk.END)
+    win.receive_log_text.config(state="disabled")
 
 
 def startSniffering():
@@ -129,6 +173,15 @@ def stopSniffering():
     IS_SNIFFERING = 0
 
 
+def addLog(string):
+    if(string == ''):
+        return
+    
+    win.receive_log_text.config(state="normal")
+    win.receive_log_text.insert(tk.END, string)
+    win.receive_log_text.config(state="disabled")
+
+
 def printLog(line, level=3):
     if(line == ''):
         return
@@ -140,7 +193,7 @@ def printLog(line, level=3):
     elif(level == 1):
         win.receive_log_text.insert(tk.END, "[WARN] ")
     elif(level == 2):
-        win.receive_log_text.insert(tk.END, "[DATA] ")
+        win.receive_log_text.insert(tk.END, "[CAN]  ")
     elif(level == 3):
         win.receive_log_text.insert(tk.END, "[INFO] ")
     else:

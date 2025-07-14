@@ -19,7 +19,9 @@ import main
 
 def init(win):
     main.passWindowInstance(win)
+
     displayCOMPort()
+    changeWindowSubTitle("COMポート未接続")
 
 
 def displayCOMPort():
@@ -27,6 +29,12 @@ def displayCOMPort():
 
 def connectUART():
     main.connectUART()
+
+def clearLog():
+    main.clearLog()
+
+def changeWindowSubTitle(sub=None):
+    main.changeWindowSubTitle(sub)
 
 
 font_console = ""
@@ -60,7 +68,7 @@ class Toplevel1:
         top.minsize(120, 1)
         top.maxsize(3844, 1061)
         top.resizable(1,  1)
-        top.title("EtherCAN Sniffer Client v1.0")
+        top.title("EtherCAN Sniffer Client")
         top.configure(highlightcolor="SystemWindowText")
 
         font_console = tkFont.Font(
@@ -417,7 +425,7 @@ class Toplevel1:
         self.receive_unitCodeConv_chk.configure(text='''UnitCodeの自動変換''')
         self.receive_unitCodeConv_chk.configure(compound='left')
 
-        self.receive_logClear_btn = ttk.Button(self.receive_frame)
+        self.receive_logClear_btn = ttk.Button(self.receive_frame, command=clearLog)
         self.receive_logClear_btn.place(relx=0.75, rely=0.866, height=25
                 , width=106, bordermode='ignore')
         self.receive_logClear_btn.configure(text='''クリア''')
