@@ -22,7 +22,7 @@ import serial.tools.list_ports
 _debug = True # False to eliminate debug printing from callback functions.
 
 serialPort = ''
-writePacket = None
+writeLine = None
 
 portDeviceNameList = []
 portNumberList = []
@@ -39,6 +39,10 @@ LOG_LEVEL_ERR = 0
 LOG_LEVEL_WARN = 1
 LOG_LEVEL_DATA = 2
 LOG_LEVEL_INFO = 3
+
+receive_dataFormat_pulldown_selections = ['DEC','BIN','HEX']
+send_datax_type_pulldown_selections = ['DEC','BIN','HEX']
+send_sendMode_pulldown_selections = ['Main -> Unit','Unit -> Main','Sniffer -> Main',]
 
 def main(*args):
     '''Main entry point for the application.'''
@@ -59,9 +63,27 @@ if __name__ == '__main__':
 
 def init():
     atexit.register(on_exit)
+    comboSelectInit()
 
 def on_exit():
     stopSniffering()
+    disconnectUART()
+
+
+def comboSelectInit():
+    global win
+    win.receive_dataFormat_pulldown.set(receive_dataFormat_pulldown_selections[0])
+
+    win.send_data1_type_pulldown.set(send_datax_type_pulldown_selections[0])
+    win.send_data2_type_pulldown.set(send_datax_type_pulldown_selections[0])
+    win.send_data3_type_pulldown.set(send_datax_type_pulldown_selections[0])
+    win.send_data4_type_pulldown.set(send_datax_type_pulldown_selections[0])
+    win.send_data5_type_pulldown.set(send_datax_type_pulldown_selections[0])
+    win.send_data6_type_pulldown.set(send_datax_type_pulldown_selections[0])
+    win.send_data7_type_pulldown.set(send_datax_type_pulldown_selections[0])
+    
+    win.send_sendMode_pulldown.set(send_sendMode_pulldown_selections[0])
+
 
 
 def changeWindowSubTitle(sub=None):
@@ -142,24 +164,13 @@ def thread_UART_read():
                 line = serialPort.readline().strip().decode("utf-8")
                 if line[0] == "C":
                     printLogCAN(line)
+                else:
+                    printLog(line, -1)
             else:
                 time.sleep(0.01)  # 少し待機
 
 
-def thread_UART_write():
-    global serialPort, IS_SNIFFERING, writePacket
-
-    while(IS_SNIFFERING):
-        if(serialPort != '' and writePacket != ''):
-            line = ""
-            line += "C T "
-            for i in writePacket:
-                line += i.encode()
-                line += " "
-
-
-def printLogCAN(data_raw, arg):
-    line = "CAN "
+def printLogCAN(data_raw):
     data = data_raw.split()
 
     if(data[1] == "R"):
@@ -167,7 +178,7 @@ def printLogCAN(data_raw, arg):
     else:
         line = "TX "
     
-    line += "Code:{0} ".format(data[2])
+    line += "Cd:{0} ".format(data[2])
     line += "Id:{0} ".format(data[3])
     line += "ISM:{0} ".format(data[4])
     line += "| Idx:{0} ".format(data[6])
@@ -175,7 +186,14 @@ def printLogCAN(data_raw, arg):
     line += "|"
 
     for i in range(int(data[5]) - 1):
-        line += " 0d{0}".format(data[8 + i])
+        data[8 + i] = int(data[8 + i], 10)
+
+        if(win.receive_dataFormat_pulldown.get() == 'DEC'):
+            line += " {0}".format(data[8 + i])
+        elif(win.receive_dataFormat_pulldown.get() == 'BIN'):
+            line += " {0}".format(bin(data[8 + i]))
+        else:
+            line += " {0}".format(hex(data[8 + i]))
     
     printLog(line, LOG_LEVEL_DATA)
 
@@ -189,12 +207,12 @@ def clearLog():
 def startSniffering():
     global IS_SNIFFERING
 
-    thread_1 = threading.Thread(target=thread_UART_read)
-    thread_2 = threading.Thread(target=thread_UART_write)
+    thread_1 = threading.Thread(target=thread_UART_read, daemon=True)
+    # thread_2 = threading.Thread(target=thread_UART_write, daemon=True)
     IS_SNIFFERING = 1
 
     thread_1.start()
-    thread_2.start()
+    # thread_2.start()
 
 def stopSniffering():
     global IS_SNIFFERING
@@ -225,11 +243,58 @@ def printLog(line, level=3):
     elif(level == 3):
         win.receive_log_text.insert(tk.END, "[INFO] ")
     else:
-        win.receive_log_text.insert(tk.END, "[MISC] ")
+        win.receive_log_text.insert(tk.END, "[SNIF] ")
 
     win.receive_log_text.insert(tk.END, line + "\n")
     win.receive_log_text.config(state="disabled")
     win.receive_log_text.see(tk.END)
 
-def dumpUART(line):
-    line_li = line.sprit()
+
+def sendUART(line):
+    try:
+        serialPort.write(line.encode())
+        printLogCAN(line)
+    except Exception as e:
+        printLog("ECANパケットの送信に失敗しました。", LOG_LEVEL_ERR)
+        print(e)
+
+
+def sendPacket():
+    line = []
+
+    line.append("C")
+    line.append("T")
+    line.append(win.send_unitCode_entry.get()) # Unit code
+    line.append(win.send_unitId_entry.get()) # Unit id
+    line.append(1) # isSendFromMain
+
+    data = []
+    data.append(win.send_data1_entry.get())
+    data.append(win.send_data2_entry.get())
+    data.append(win.send_data3_entry.get())
+    data.append(win.send_data4_entry.get())
+    data.append(win.send_data5_entry.get())
+    data.append(win.send_data6_entry.get())
+    data.append(win.send_data7_entry.get())
+
+    dlc = 1
+
+    for i in range(7):
+        if(data[i] == ""):
+            break
+        
+        dlc += 1
+
+    line.append(dlc)
+    line.append(win.send_phIndex_entry.get())
+    line.append(win.send_phEntry_entry.get())
+
+    lineStr = ""
+
+    for i in line:
+        lineStr += str(i) + " "
+    
+    for i in data:
+        lineStr += str(i) + " "
+
+    sendUART(lineStr + "\n")
