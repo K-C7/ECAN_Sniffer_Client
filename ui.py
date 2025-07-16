@@ -30,6 +30,9 @@ def displayCOMPort():
 def connectUART():
     main.connectUART()
 
+def disconnectUART():
+    main.disconnectUART()
+
 def clearLog():
     main.clearLog()
 
@@ -104,9 +107,15 @@ class Toplevel1:
         self.connection_frame.configure(text='''接続''')
 
         self.connection_btn = ttk.Button(self.connection_frame, command=connectUART)
-        self.connection_btn.place(relx=0.764, rely=0.538, height=26, width=105
+        self.connection_btn.place(relx=0.54, rely=0.6, height=26, width=105
                 , bordermode='ignore')
         self.connection_btn.configure(text='''接続''')
+        self.connection_btn.configure(compound='left')
+
+        self.connection_btn = ttk.Button(self.connection_frame, command=disconnectUART)
+        self.connection_btn.place(relx=0.764, rely=0.6, height=26, width=105
+                , bordermode='ignore')
+        self.connection_btn.configure(text='''切断''')
         self.connection_btn.configure(compound='left')
 
         self.connection_btn = ttk.Button(self.connection_frame, command=displayCOMPort)
@@ -115,16 +124,8 @@ class Toplevel1:
         self.connection_btn.configure(text='''再取得''')
         self.connection_btn.configure(compound='left')
 
-        self.connection_text = ttk.Label(self.connection_frame)
-        self.connection_text.place(relx=0.021, rely=0.269, height=20, width=95
-                , bordermode='ignore')
-        self.connection_text.configure(font="-family {Yu Gothic UI} -size 9")
-        self.connection_text.configure(relief="flat")
-        self.connection_text.configure(text='''COMポート''')
-        self.connection_text.configure(compound='left')
-
         self.connection_pulldown = ttk.Combobox(self.connection_frame)
-        self.connection_pulldown.place(relx=0.021, rely=0.538, relheight=0.308
+        self.connection_pulldown.place(relx=0.021, rely=0.240, relheight=0.308
                 , relwidth=0.719, bordermode='ignore')
         self.connection_pulldown.configure(font="-family {Yu Gothic UI} -size 9")
         self.connection_pulldown.configure(state='readonly')
