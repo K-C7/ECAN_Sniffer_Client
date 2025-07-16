@@ -20,6 +20,7 @@ import serial.tools.list_ports
 _debug = True # False to eliminate debug printing from callback functions.
 
 serialPort = ''
+writePacket = None
 
 portDeviceNameList = []
 portNumberList = []
@@ -134,7 +135,19 @@ def thread_UART_read():
                 printLogCAN(line)
 
 
-def printLogCAN(data_raw):
+def thread_UART_write():
+    global serialPort, IS_SNIFFERING, writePacket
+
+    while(IS_SNIFFERING):
+        if(serialPort != '' and writePacket != ''):
+            line = ""
+            line += "C T "
+            for i in writePacket:
+                line += i.encode()
+                line += " "
+
+
+def printLogCAN(data_raw, arg):
     line = "CAN "
     data = data_raw.split()
 
@@ -166,8 +179,11 @@ def startSniffering():
     global IS_SNIFFERING
 
     thread_1 = threading.Thread(target=thread_UART_read)
+    thread_2 = threading.Thread(target=thread_UART_write)
     IS_SNIFFERING = 1
+
     thread_1.start()
+    thread_2.start()
 
 def stopSniffering():
     IS_SNIFFERING = 0
