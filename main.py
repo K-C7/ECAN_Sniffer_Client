@@ -7,6 +7,8 @@
 
 import sys
 import os
+import time
+import atexit
 import threading
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -47,14 +49,18 @@ def main(*args):
     _top1 = root
     _w1 = ui.Toplevel1(_top1)
 
-    # init()
+    init()
 
     root.mainloop()
 
 if __name__ == '__main__':
     ui.start_up()
 
-# def init():
+def init():
+    atexit.register(on_exit)
+
+def on_exit():
+    stopSniffering()
 
 
 def changeWindowSubTitle(sub=None):
@@ -111,9 +117,15 @@ def connectUART():
 
 
 def disconnectUART():
+    global serialPort
+
+    if(serialPort != ''):
+        printLog("{0}との接続を切断しました。".format(portNumberList[portIdx]), LOG_LEVEL_INFO)
+        changeWindowSubTitle("COMポート未接続")
+
     try:
         serialPort.close()
-        printLog("{0}との接続を切断しました。".format(portNumberList[portIdx]), LOG_LEVEL_INFO)
+        serialPort = ''
     except:
         pass
 
@@ -125,29 +137,27 @@ def thread_UART_read():
 
     while(IS_SNIFFERING):
         if(serialPort != ''):
-            line = serialPort.readline()
-            line = line.strip()
-            line = line.decode("utf-8")
-
-            # printLog(line, LOG_LEVEL_DATA)
-            if(line[0] == "C"):
-                printLogCAN(line)
+            if serialPort.in_waiting > 0:
+                line = serialPort.readline().strip().decode("utf-8")
+                if line[0] == "C":
+                    printLogCAN(line)
+            else:
+                time.sleep(0.01)  # 少し待機
 
 
 def printLogCAN(data_raw):
-    line = "CAN "
     data = data_raw.split()
 
     if(data[1] == "R"):
-        line += "RX "
+        line = "RX "
     else:
-        line += "TX "
+        line = "TX "
     
     line += "Code:{0} ".format(data[2])
     line += "Id:{0} ".format(data[3])
     line += "ISM:{0} ".format(data[4])
-    line += "| Index:{0} ".format(data[6])
-    line += "Entry:{0} ".format(data[7])
+    line += "| Idx:{0} ".format(data[6])
+    line += "Etr:{0} ".format(data[7])
     line += "|"
 
     for i in range(int(data[5]) - 1):
@@ -165,11 +175,12 @@ def clearLog():
 def startSniffering():
     global IS_SNIFFERING
 
-    thread_1 = threading.Thread(target=thread_UART_read)
+    thread_1 = threading.Thread(target=thread_UART_read, daemon=True)
     IS_SNIFFERING = 1
     thread_1.start()
 
 def stopSniffering():
+    global IS_SNIFFERING
     IS_SNIFFERING = 0
 
 
