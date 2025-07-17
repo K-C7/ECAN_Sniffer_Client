@@ -454,7 +454,7 @@ class Toplevel1:
         self.receive_dataFormat_pulldown.configure(textvariable=self.receive_dataFormat_var)
 
         self.receive_log_text = tk.Text(self.receive_frame)
-        self.receive_log_text.place(relx=0.021, rely=0.045, relheight=0.805
+        self.receive_log_text.place(relx=0.021, rely=0.07, relheight=0.78
                 , relwidth=0.948, bordermode='ignore')
         self.receive_log_text.configure(background="white")
         self.receive_log_text.configure(font=font_console)
