@@ -42,7 +42,7 @@ LOG_LEVEL_INFO = 3
 
 receive_dataFormat_pulldown_selections = ['DEC','BIN','HEX']
 send_datax_type_pulldown_selections = ['DEC','BIN','HEX']
-send_sendMode_pulldown_selections = ['Main -> Unit','Unit -> Main','Sniffer -> Main',]
+send_sendMode_pulldown_selections = ['Main -> Unit','Unit -> Main','Sniffer -> Main']
 
 def main(*args):
     '''Main entry point for the application.'''
@@ -64,6 +64,8 @@ if __name__ == '__main__':
 def init():
     atexit.register(on_exit)
     comboSelectInit()
+
+    win.receive_log_text.config(state="disabled")
 
 def on_exit():
     stopSniffering()
@@ -134,6 +136,7 @@ def connectUART():
 
         printLog("{0}に接続しました。".format(portNumberList[portIdx]))
         changeWindowSubTitle("COMポート接続済み")
+        sendUART("Hello Sniffer!\n")
         startSniffering()
     except:
         printLog("{0}への接続に失敗しました。".format(portNumberList[portIdx]), LOG_LEVEL_ERR)
@@ -178,11 +181,11 @@ def printLogCAN(data_raw):
     else:
         line = "TX "
     
-    line += "Cd:{0} ".format(data[2])
-    line += "Id:{0} ".format(data[3])
-    line += "ISM:{0} ".format(data[4])
-    line += "| Idx:{0} ".format(data[6])
-    line += "Etr:{0} ".format(data[7])
+    line += "{0} ".format(data[2])
+    line += "{0} ".format(data[3])
+    line += "{0} ".format(data[4])
+    line += "| {0} ".format(data[6])
+    line += "{0} ".format(data[7])
     line += "|"
 
     for i in range(int(data[5]) - 1):
@@ -253,7 +256,6 @@ def printLog(line, level=3):
 def sendUART(line):
     try:
         serialPort.write(line.encode())
-        printLogCAN(line)
     except Exception as e:
         printLog("ECANパケットの送信に失敗しました。", LOG_LEVEL_ERR)
         print(e)
@@ -298,3 +300,4 @@ def sendPacket():
         lineStr += str(i) + " "
 
     sendUART(lineStr + "\n")
+    printLogCAN(lineStr)

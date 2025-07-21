@@ -70,10 +70,13 @@ class Toplevel1:
         '''This class configures and populates the toplevel window.
            top is the toplevel containing window.'''
 
-        top.geometry("1012x542+427+246")
-        top.minsize(120, 1)
-        top.maxsize(3844, 1061)
-        top.resizable(1,  1)
+        top.geometry("1012x542+200+200")
+        top.resizable(0,  0)
+
+        top.update_idletasks()
+        top.geometry("1012x542+200+200")
+        top.resizable(0,  0)
+
         top.title("EtherCAN Sniffer Client")
         top.configure(highlightcolor="SystemWindowText")
 
@@ -103,6 +106,11 @@ class Toplevel1:
         top.configure(menu = self.menubar)
 
         _style_code()
+
+
+        # ------ Connection ------
+
+
         self.connection_frame = ttk.Labelframe(self.top)
         self.connection_frame.place(relx=0.01, rely=0.018, relheight=0.144
                 , relwidth=0.478)
@@ -134,11 +142,92 @@ class Toplevel1:
         self.connection_pulldown.configure(state='readonly')
         self.connection_pulldown.configure(textvariable=self.connection_comPort_var)
 
+
+        # ------ Receive ------
+
+
+        self.receive_frame = ttk.Labelframe(self.top)
+        self.receive_frame.place(relx=0.01, rely=0.172, relheight=0.814
+                , relwidth=0.474)
+        self.receive_frame.configure(relief='')
+        self.receive_frame.configure(text='''受信''')
+
+        self.receive_showTimeStamp_chk = ttk.Checkbutton(self.receive_frame)
+        self.receive_showTimeStamp_chk.place(relx=0.021, rely=0.866
+                , relwidth=0.333, relheight=0.0, height=23, bordermode='ignore')
+        self.receive_showTimeStamp_chk.configure(variable=self.tch63)
+        self.receive_showTimeStamp_chk.configure(text='''タイムスタンプを表示''')
+        self.receive_showTimeStamp_chk.configure(compound='left')
+
+        self.receive_unitCodeConv_chk = ttk.Checkbutton(self.receive_frame)
+        self.receive_unitCodeConv_chk.place(relx=0.021, rely=0.916
+                , relwidth=0.292, relheight=0.0, height=22, bordermode='ignore')
+        self.receive_unitCodeConv_chk.configure(variable=self.tch64)
+        self.receive_unitCodeConv_chk.configure(text='''UnitCodeの自動変換''')
+        self.receive_unitCodeConv_chk.configure(compound='left')
+
+        self.receive_logClear_btn = ttk.Button(self.receive_frame, command=clearLog)
+        self.receive_logClear_btn.place(relx=0.75, rely=0.866, height=25
+                , width=106, bordermode='ignore')
+        self.receive_logClear_btn.configure(text='''クリア''')
+        self.receive_logClear_btn.configure(compound='left')
+
+        self.receive_dataFormat_text = ttk.Label(self.receive_frame)
+        self.receive_dataFormat_text.place(relx=0.521, rely=0.866, height=21
+                , width=95, bordermode='ignore')
+        self.receive_dataFormat_text.configure(font="-family {Yu Gothic UI} -size 9")
+        self.receive_dataFormat_text.configure(relief="flat")
+        self.receive_dataFormat_text.configure(text='''Dataの表示形式''')
+        self.receive_dataFormat_text.configure(compound='left')
+
+        self.receive_dataFormat_pulldown = ttk.Combobox(self.receive_frame)
+        self.receive_dataFormat_pulldown.place(relx=0.521, rely=0.916
+                , relheight=0.054, relwidth=0.177, bordermode='ignore')
+        self.value_list = ['DEC','BIN','HEX',]
+        self.receive_dataFormat_pulldown.configure(values=self.value_list)
+        self.receive_dataFormat_pulldown.configure(font="-family {Yu Gothic UI} -size 9")
+        self.receive_dataFormat_pulldown.configure(state='readonly')
+        self.receive_dataFormat_pulldown.configure(textvariable=self.receive_dataFormat_var)
+
+        self.receive_log_text = tk.Text(self.receive_frame)
+        self.receive_log_text.place(relx=0.021, rely=0.07, relheight=0.78
+                , relwidth=0.948, bordermode='ignore')
+        self.receive_log_text.configure(background="white")
+        self.receive_log_text.configure(font=font_console)
+        self.receive_log_text.configure(highlightcolor="SystemWindowText")
+        self.receive_log_text.configure(selectbackground="#d9d9d9")
+        self.receive_log_text.configure(selectforeground="black")
+        self.receive_log_text.configure(wrap="word")
+
+        self.receive_log_row_text = ttk.Label(self.receive_frame)
+        self.receive_log_row_text.place(relx=0.12, rely=0.022, height=21
+                , width=200, bordermode='ignore')
+        self.receive_log_row_text.configure(font="-family {Yu Gothic UI} -size 9")
+        self.receive_log_row_text.configure(relief="flat")
+        self.receive_log_row_text.configure(text='''Dir  Cd Id ISM  Idx Etr  Data''')
+        self.receive_log_row_text.configure(compound='left')
+
+
+        # ------ Send ------
+
         self.send_frame = ttk.Labelframe(self.top)
         self.send_frame.place(relx=0.504, rely=0.018, relheight=0.489
                 , relwidth=0.484)
         self.send_frame.configure(relief='')
         self.send_frame.configure(text='''送信''')
+
+
+        self.send_unitCode_entry = ttk.Entry(self.send_frame)
+        self.send_unitCode_entry.place(relx=0.041, rely=0.226, relheight=0.087
+                , relwidth=0.114, bordermode='ignore')
+        self.send_unitCode_entry.configure(font="-family {Yu Gothic UI} -size 9")
+        self.send_unitCode_entry.configure(cursor="ibeam")
+
+        self.send_unitId_entry = ttk.Entry(self.send_frame)
+        self.send_unitId_entry.place(relx=0.184, rely=0.226, relheight=0.087
+                , relwidth=0.114, bordermode='ignore')
+        self.send_unitId_entry.configure(font="-family {Yu Gothic UI} -size 9")
+        self.send_unitId_entry.configure(cursor="ibeam")
 
         self.send_phIndex_entry = ttk.Entry(self.send_frame)
         self.send_phIndex_entry.place(relx=0.367, rely=0.226, relheight=0.087
@@ -151,65 +240,6 @@ class Toplevel1:
                 , relwidth=0.114, bordermode='ignore')
         self.send_phEntry_entry.configure(font="-family {Yu Gothic UI} -size 9")
         self.send_phEntry_entry.configure(cursor="ibeam")
-
-        self.send_phEntry_text = ttk.Label(self.send_frame)
-        self.send_phEntry_text.place(relx=0.51, rely=0.151, height=20, width=35
-                , bordermode='ignore')
-        self.send_phEntry_text.configure(font="-family {Yu Gothic UI} -size 9")
-        self.send_phEntry_text.configure(relief="flat")
-        self.send_phEntry_text.configure(text='''Entry''')
-        self.send_phEntry_text.configure(compound='left')
-
-        self.send_phIndex_text = ttk.Label(self.send_frame)
-        self.send_phIndex_text.place(relx=0.367, rely=0.151, height=20, width=35
-                , bordermode='ignore')
-        self.send_phIndex_text.configure(font="-family {Yu Gothic UI} -size 9")
-        self.send_phIndex_text.configure(relief="flat")
-        self.send_phIndex_text.configure(text='''Index''')
-        self.send_phIndex_text.configure(compound='left')
-
-        self.send_unitCode_entry = ttk.Entry(self.send_frame)
-        self.send_unitCode_entry.place(relx=0.041, rely=0.226, relheight=0.087
-                , relwidth=0.114, bordermode='ignore')
-        self.send_unitCode_entry.configure(font="-family {Yu Gothic UI} -size 9")
-        self.send_unitCode_entry.configure(cursor="ibeam")
-
-        self.send_unitCode_text = ttk.Label(self.send_frame)
-        self.send_unitCode_text.place(relx=0.041, rely=0.151, height=20, width=65
-                , bordermode='ignore')
-        self.send_unitCode_text.configure(font="-family {Yu Gothic UI} -size 9")
-        self.send_unitCode_text.configure(relief="flat")
-        self.send_unitCode_text.configure(text='''Unit Code''')
-        self.send_unitCode_text.configure(compound='left')
-
-        self.send_unitId_text = ttk.Label(self.send_frame)
-        self.send_unitId_text.place(relx=0.184, rely=0.151, height=20, width=45
-                , bordermode='ignore')
-        self.send_unitId_text.configure(font="-family {Yu Gothic UI} -size 9")
-        self.send_unitId_text.configure(relief="flat")
-        self.send_unitId_text.configure(text='''Unit ID''')
-        self.send_unitId_text.configure(compound='left')
-
-        self.TLabel1 = ttk.Label(self.send_frame)
-        self.TLabel1.place(relx=0.367, rely=0.075, height=19, width=105
-                , bordermode='ignore')
-        self.TLabel1.configure(font="-family {Yu Gothic UI} -size 9")
-        self.TLabel1.configure(relief="flat")
-        self.TLabel1.configure(text='''Payload Header''')
-        self.TLabel1.configure(compound='left')
-
-        self.TLabel2 = ttk.Label(self.send_frame)
-        self.TLabel2.place(relx=0.041, rely=0.075, height=19, width=65
-                , bordermode='ignore')
-        self.TLabel2.configure(font="-family {Yu Gothic UI} -size 9")
-        self.TLabel2.configure(relief="flat")
-        self.TLabel2.configure(text='''Address''')
-        self.TLabel2.configure(compound='left')
-
-        self.send_upper_sep = ttk.Separator(self.send_frame)
-        self.send_upper_sep.place(relx=0.333, rely=0.098, relheight=0.238
-                , bordermode='ignore')
-        self.send_upper_sep.configure(orient="vertical")
 
         self.send_data1_entry = ttk.Entry(self.send_frame)
         self.send_data1_entry.place(relx=0.041, rely=0.453, relheight=0.087
@@ -253,90 +283,6 @@ class Toplevel1:
         self.send_data7_entry.configure(takefocus="")
         self.send_data7_entry.configure(cursor="ibeam")
 
-        self.send_data1_text = ttk.Label(self.send_frame)
-        self.send_data1_text.place(relx=0.041, rely=0.377, height=19, width=45
-                , bordermode='ignore')
-        self.send_data1_text.configure(font="TkDefaultFont")
-        self.send_data1_text.configure(relief="flat")
-        self.send_data1_text.configure(text='''Data[1]''')
-        self.send_data1_text.configure(compound='left')
-
-        self.send_data2_text = ttk.Label(self.send_frame)
-        self.send_data2_text.place(relx=0.163, rely=0.377, height=19, width=45
-                , bordermode='ignore')
-        self.send_data2_text.configure(font="TkDefaultFont")
-        self.send_data2_text.configure(relief="flat")
-        self.send_data2_text.configure(text='''Data[2]''')
-        self.send_data2_text.configure(compound='left')
-
-        self.send_data3_text = ttk.Label(self.send_frame)
-        self.send_data3_text.place(relx=0.286, rely=0.377, height=19, width=45
-                , bordermode='ignore')
-        self.send_data3_text.configure(font="TkDefaultFont")
-        self.send_data3_text.configure(relief="flat")
-        self.send_data3_text.configure(text='''Data[3]''')
-        self.send_data3_text.configure(compound='left')
-
-        self.send_data4_text = ttk.Label(self.send_frame)
-        self.send_data4_text.place(relx=0.408, rely=0.377, height=19, width=45
-                , bordermode='ignore')
-        self.send_data4_text.configure(font="TkDefaultFont")
-        self.send_data4_text.configure(relief="flat")
-        self.send_data4_text.configure(text='''Data[4]''')
-        self.send_data4_text.configure(compound='left')
-
-        self.send_data5_text = ttk.Label(self.send_frame)
-        self.send_data5_text.place(relx=0.531, rely=0.377, height=19, width=45
-                , bordermode='ignore')
-        self.send_data5_text.configure(font="TkDefaultFont")
-        self.send_data5_text.configure(relief="flat")
-        self.send_data5_text.configure(text='''Data[5]''')
-        self.send_data5_text.configure(compound='left')
-
-        self.send_data6_text = ttk.Label(self.send_frame)
-        self.send_data6_text.place(relx=0.653, rely=0.377, height=19, width=45
-                , bordermode='ignore')
-        self.send_data6_text.configure(font="TkDefaultFont")
-        self.send_data6_text.configure(relief="flat")
-        self.send_data6_text.configure(text='''Data[6]''')
-        self.send_data6_text.configure(compound='left')
-
-        self.send_data7_text = ttk.Label(self.send_frame)
-        self.send_data7_text.place(relx=0.776, rely=0.377, height=19, width=45
-                , bordermode='ignore')
-        self.send_data7_text.configure(font="TkDefaultFont")
-        self.send_data7_text.configure(relief="flat")
-        self.send_data7_text.configure(text='''Data[7]''')
-        self.send_data7_text.configure(compound='left')
-
-        self.send_send_btn = ttk.Button(self.send_frame, command=sendPacket)
-        self.send_send_btn.place(relx=0.776, rely=0.868, height=25, width=96
-                , bordermode='ignore')
-        self.send_send_btn.configure(takefocus="")
-        self.send_send_btn.configure(text='''送信''')
-        self.send_send_btn.configure(compound='left')
-
-        self.send_clear_btn = ttk.Button(self.send_frame)
-        self.send_clear_btn.place(relx=0.551, rely=0.868, height=25, width=96
-                , bordermode='ignore')
-        self.send_clear_btn.configure(takefocus="")
-        self.send_clear_btn.configure(text='''クリア''')
-        self.send_clear_btn.configure(compound='left')
-
-        self.send_unitId_entry = ttk.Entry(self.send_frame)
-        self.send_unitId_entry.place(relx=0.184, rely=0.226, relheight=0.087
-                , relwidth=0.114, bordermode='ignore')
-        self.send_unitId_entry.configure(font="-family {Yu Gothic UI} -size 9")
-        self.send_unitId_entry.configure(cursor="ibeam")
-
-        self.send_sendMode_text = ttk.Label(self.send_frame)
-        self.send_sendMode_text.place(relx=0.041, rely=0.792, height=19
-                , width=195, bordermode='ignore')
-        self.send_sendMode_text.configure(font="TkDefaultFont")
-        self.send_sendMode_text.configure(relief="flat")
-        self.send_sendMode_text.configure(text='''送信モード(模倣するパケットの流れ)''')
-        self.send_sendMode_text.configure(compound='left')
-        self.send_sendMode_text.configure(cursor="ibeam")
 
         self.send_data1_type_pulldown = ttk.Combobox(self.send_frame)
         self.send_data1_type_pulldown.place(relx=0.041, rely=0.566
@@ -410,59 +356,144 @@ class Toplevel1:
         self.send_sendMode_pulldown.configure(textvariable=self.send_sendMode_var)
         self.send_sendMode_pulldown.configure(takefocus="")
 
-        self.receive_frame = ttk.Labelframe(self.top)
-        self.receive_frame.place(relx=0.01, rely=0.172, relheight=0.814
-                , relwidth=0.474)
-        self.receive_frame.configure(relief='')
-        self.receive_frame.configure(text='''受信''')
 
-        self.receive_showTimeStamp_chk = ttk.Checkbutton(self.receive_frame)
-        self.receive_showTimeStamp_chk.place(relx=0.021, rely=0.866
-                , relwidth=0.333, relheight=0.0, height=23, bordermode='ignore')
-        self.receive_showTimeStamp_chk.configure(variable=self.tch63)
-        self.receive_showTimeStamp_chk.configure(text='''タイムスタンプを表示''')
-        self.receive_showTimeStamp_chk.configure(compound='left')
+        self.send_clear_btn = ttk.Button(self.send_frame)
+        self.send_clear_btn.place(relx=0.551, rely=0.868, height=25, width=96
+                , bordermode='ignore')
+        self.send_clear_btn.configure(takefocus="")
+        self.send_clear_btn.configure(text='''クリア''')
+        self.send_clear_btn.configure(compound='left')
 
-        self.receive_unitCodeConv_chk = ttk.Checkbutton(self.receive_frame)
-        self.receive_unitCodeConv_chk.place(relx=0.021, rely=0.916
-                , relwidth=0.292, relheight=0.0, height=22, bordermode='ignore')
-        self.receive_unitCodeConv_chk.configure(variable=self.tch64)
-        self.receive_unitCodeConv_chk.configure(text='''UnitCodeの自動変換''')
-        self.receive_unitCodeConv_chk.configure(compound='left')
+        self.send_send_btn = ttk.Button(self.send_frame, command=sendPacket)
+        self.send_send_btn.place(relx=0.776, rely=0.868, height=25, width=96
+                , bordermode='ignore')
+        self.send_send_btn.configure(takefocus="")
+        self.send_send_btn.configure(text='''送信''')
+        self.send_send_btn.configure(compound='left')
 
-        self.receive_logClear_btn = ttk.Button(self.receive_frame, command=clearLog)
-        self.receive_logClear_btn.place(relx=0.75, rely=0.866, height=25
-                , width=106, bordermode='ignore')
-        self.receive_logClear_btn.configure(text='''クリア''')
-        self.receive_logClear_btn.configure(compound='left')
 
-        self.receive_dataFormat_text = ttk.Label(self.receive_frame)
-        self.receive_dataFormat_text.place(relx=0.521, rely=0.866, height=21
-                , width=95, bordermode='ignore')
-        self.receive_dataFormat_text.configure(font="-family {Yu Gothic UI} -size 9")
-        self.receive_dataFormat_text.configure(relief="flat")
-        self.receive_dataFormat_text.configure(text='''Dataの表示形式''')
-        self.receive_dataFormat_text.configure(compound='left')
+        self.send_unitCode_text = ttk.Label(self.send_frame)
+        self.send_unitCode_text.place(relx=0.041, rely=0.151, height=20, width=65
+                , bordermode='ignore')
+        self.send_unitCode_text.configure(font="-family {Yu Gothic UI} -size 9")
+        self.send_unitCode_text.configure(relief="flat")
+        self.send_unitCode_text.configure(text='''Unit Code''')
+        self.send_unitCode_text.configure(compound='left')
 
-        self.receive_dataFormat_pulldown = ttk.Combobox(self.receive_frame)
-        self.receive_dataFormat_pulldown.place(relx=0.521, rely=0.916
-                , relheight=0.054, relwidth=0.177, bordermode='ignore')
-        self.value_list = ['DEC','BIN','HEX',]
-        self.receive_dataFormat_pulldown.configure(values=self.value_list)
-        self.receive_dataFormat_pulldown.configure(font="-family {Yu Gothic UI} -size 9")
-        self.receive_dataFormat_pulldown.configure(state='readonly')
-        self.receive_dataFormat_pulldown.configure(textvariable=self.receive_dataFormat_var)
+        self.send_unitId_text = ttk.Label(self.send_frame)
+        self.send_unitId_text.place(relx=0.184, rely=0.151, height=20, width=45
+                , bordermode='ignore')
+        self.send_unitId_text.configure(font="-family {Yu Gothic UI} -size 9")
+        self.send_unitId_text.configure(relief="flat")
+        self.send_unitId_text.configure(text='''Unit ID''')
+        self.send_unitId_text.configure(compound='left')
 
-        self.receive_log_text = tk.Text(self.receive_frame)
-        self.receive_log_text.place(relx=0.021, rely=0.07, relheight=0.78
-                , relwidth=0.948, bordermode='ignore')
-        self.receive_log_text.configure(background="white")
-        self.receive_log_text.configure(font=font_console)
-        self.receive_log_text.configure(highlightcolor="SystemWindowText")
-        self.receive_log_text.configure(selectbackground="#d9d9d9")
-        self.receive_log_text.configure(selectforeground="black")
-        self.receive_log_text.configure(wrap="word")
+        self.send_phEntry_text = ttk.Label(self.send_frame)
+        self.send_phEntry_text.place(relx=0.51, rely=0.151, height=20, width=35
+                , bordermode='ignore')
+        self.send_phEntry_text.configure(font="-family {Yu Gothic UI} -size 9")
+        self.send_phEntry_text.configure(relief="flat")
+        self.send_phEntry_text.configure(text='''Entry''')
+        self.send_phEntry_text.configure(compound='left')
 
+        self.send_phIndex_text = ttk.Label(self.send_frame)
+        self.send_phIndex_text.place(relx=0.367, rely=0.151, height=20, width=35
+                , bordermode='ignore')
+        self.send_phIndex_text.configure(font="-family {Yu Gothic UI} -size 9")
+        self.send_phIndex_text.configure(relief="flat")
+        self.send_phIndex_text.configure(text='''Index''')
+        self.send_phIndex_text.configure(compound='left')
+
+        self.TLabel1 = ttk.Label(self.send_frame)
+        self.TLabel1.place(relx=0.367, rely=0.075, height=19, width=105
+                , bordermode='ignore')
+        self.TLabel1.configure(font="-family {Yu Gothic UI} -size 9")
+        self.TLabel1.configure(relief="flat")
+        self.TLabel1.configure(text='''Payload Header''')
+        self.TLabel1.configure(compound='left')
+
+        self.TLabel2 = ttk.Label(self.send_frame)
+        self.TLabel2.place(relx=0.041, rely=0.075, height=19, width=65
+                , bordermode='ignore')
+        self.TLabel2.configure(font="-family {Yu Gothic UI} -size 9")
+        self.TLabel2.configure(relief="flat")
+        self.TLabel2.configure(text='''Address''')
+        self.TLabel2.configure(compound='left')
+
+        self.send_upper_sep = ttk.Separator(self.send_frame)
+        self.send_upper_sep.place(relx=0.333, rely=0.098, relheight=0.238
+                , bordermode='ignore')
+        self.send_upper_sep.configure(orient="vertical")
+
+        self.send_data1_text = ttk.Label(self.send_frame)
+        self.send_data1_text.place(relx=0.041, rely=0.377, height=19, width=45
+                , bordermode='ignore')
+        self.send_data1_text.configure(font="TkDefaultFont")
+        self.send_data1_text.configure(relief="flat")
+        self.send_data1_text.configure(text='''Data[1]''')
+        self.send_data1_text.configure(compound='left')
+
+        self.send_data2_text = ttk.Label(self.send_frame)
+        self.send_data2_text.place(relx=0.163, rely=0.377, height=19, width=45
+                , bordermode='ignore')
+        self.send_data2_text.configure(font="TkDefaultFont")
+        self.send_data2_text.configure(relief="flat")
+        self.send_data2_text.configure(text='''Data[2]''')
+        self.send_data2_text.configure(compound='left')
+
+        self.send_data3_text = ttk.Label(self.send_frame)
+        self.send_data3_text.place(relx=0.286, rely=0.377, height=19, width=45
+                , bordermode='ignore')
+        self.send_data3_text.configure(font="TkDefaultFont")
+        self.send_data3_text.configure(relief="flat")
+        self.send_data3_text.configure(text='''Data[3]''')
+        self.send_data3_text.configure(compound='left')
+
+        self.send_data4_text = ttk.Label(self.send_frame)
+        self.send_data4_text.place(relx=0.408, rely=0.377, height=19, width=45
+                , bordermode='ignore')
+        self.send_data4_text.configure(font="TkDefaultFont")
+        self.send_data4_text.configure(relief="flat")
+        self.send_data4_text.configure(text='''Data[4]''')
+        self.send_data4_text.configure(compound='left')
+
+        self.send_data5_text = ttk.Label(self.send_frame)
+        self.send_data5_text.place(relx=0.531, rely=0.377, height=19, width=45
+                , bordermode='ignore')
+        self.send_data5_text.configure(font="TkDefaultFont")
+        self.send_data5_text.configure(relief="flat")
+        self.send_data5_text.configure(text='''Data[5]''')
+        self.send_data5_text.configure(compound='left')
+
+        self.send_data6_text = ttk.Label(self.send_frame)
+        self.send_data6_text.place(relx=0.653, rely=0.377, height=19, width=45
+                , bordermode='ignore')
+        self.send_data6_text.configure(font="TkDefaultFont")
+        self.send_data6_text.configure(relief="flat")
+        self.send_data6_text.configure(text='''Data[6]''')
+        self.send_data6_text.configure(compound='left')
+
+        self.send_data7_text = ttk.Label(self.send_frame)
+        self.send_data7_text.place(relx=0.776, rely=0.377, height=19, width=45
+                , bordermode='ignore')
+        self.send_data7_text.configure(font="TkDefaultFont")
+        self.send_data7_text.configure(relief="flat")
+        self.send_data7_text.configure(text='''Data[7]''')
+        self.send_data7_text.configure(compound='left')
+
+        self.send_sendMode_text = ttk.Label(self.send_frame)
+        self.send_sendMode_text.place(relx=0.041, rely=0.792, height=19
+                , width=195, bordermode='ignore')
+        self.send_sendMode_text.configure(font="TkDefaultFont")
+        self.send_sendMode_text.configure(relief="flat")
+        self.send_sendMode_text.configure(text='''送信モード(模倣するパケットの流れ)''')
+        self.send_sendMode_text.configure(compound='left')
+        self.send_sendMode_text.configure(cursor="ibeam")
+
+
+        # ------ Preset ------
+
+        
         self.top_mid_sep = ttk.Separator(self.top)
         self.top_mid_sep.place(relx=0.494, rely=0.018,  relheight=0.959)
         self.top_mid_sep.configure(orient="vertical")
