@@ -43,6 +43,8 @@ LOG_LEVEL_INFO = 3
 receive_dataFormat_pulldown_selections = ['DEC','BIN','HEX']
 send_datax_type_pulldown_selections = ['DEC','BIN','HEX']
 send_sendMode_pulldown_selections = ['Main -> Unit','Unit -> Main','Sniffer -> Main']
+send_sendMode_addressText = ["送信先のAddress", "送信元のAddress", "SnifferのAddress"]
+send_sendMode_ism = [1, 0, 2]
 
 def main(*args):
     '''Main entry point for the application.'''
@@ -61,16 +63,20 @@ def main(*args):
 if __name__ == '__main__':
     ui.start_up()
 
+
+
+
+# ------ Init / App ------
 def init():
     atexit.register(on_exit)
     comboSelectInit()
+    onSendModeChange()
 
     win.receive_log_text.config(state="disabled")
 
 def on_exit():
     stopSniffering()
     disconnectUART()
-
 
 def comboSelectInit():
     global win
@@ -86,20 +92,19 @@ def comboSelectInit():
     
     win.send_sendMode_pulldown.set(send_sendMode_pulldown_selections[0])
 
-
-
 def changeWindowSubTitle(sub=None):
     if(sub == None):
         root.title("{0} {1}".format(win_title, win_version))
     else:    
         root.title("{0} {1} - {2}".format(win_title, win_version, sub))
 
-
 def passWindowInstance(win_instance):
     global win
     win = win_instance
 
 
+
+# ------ Connection ------
 def displayCOMPort():
     global portDeviceNameList, portNumberList
 
@@ -158,19 +163,41 @@ def disconnectUART():
     stopSniffering()
 
 
-def thread_UART_read():
-    global serialPort, IS_SNIFFERING
 
-    while(IS_SNIFFERING):
-        if(serialPort != ''):
-            if serialPort.in_waiting > 0:
-                line = serialPort.readline().strip().decode("utf-8")
-                if line[0] == "C":
-                    printLogCAN(line)
-                else:
-                    printLog(line, -1)
-            else:
-                time.sleep(0.01)  # 少し待機
+# ------ Receive ------
+def printLog(line, level=3):
+    if(line == ''):
+        return
+
+    win.receive_log_text.config(state="normal")
+
+    if(level == 0):
+        win.receive_log_text.insert(tk.END, "[ERR]  ")
+    elif(level == 1):
+        win.receive_log_text.insert(tk.END, "[WARN] ")
+    elif(level == 2):
+        win.receive_log_text.insert(tk.END, "[CAN]  ")
+    elif(level == 3):
+        win.receive_log_text.insert(tk.END, "[INFO] ")
+    else:
+        win.receive_log_text.insert(tk.END, "[SNIF] ")
+
+    win.receive_log_text.insert(tk.END, line + "\n")
+    win.receive_log_text.config(state="disabled")
+    win.receive_log_text.see(tk.END)
+
+def addLog(string):
+    if(string == ''):
+        return
+    
+    win.receive_log_text.config(state="normal")
+    win.receive_log_text.insert(tk.END, string)
+    win.receive_log_text.config(state="disabled")
+
+def clearLog():
+    win.receive_log_text.config(state="normal")
+    win.receive_log_text.delete(1.0, tk.END)
+    win.receive_log_text.config(state="disabled")
 
 
 def printLogCAN(data_raw):
@@ -201,74 +228,22 @@ def printLogCAN(data_raw):
     printLog(line, LOG_LEVEL_DATA)
 
 
-def clearLog():
-    win.receive_log_text.config(state="normal")
-    win.receive_log_text.delete(1.0, tk.END)
-    win.receive_log_text.config(state="disabled")
 
-
-def startSniffering():
-    global IS_SNIFFERING
-
-    thread_1 = threading.Thread(target=thread_UART_read, daemon=True)
-    # thread_2 = threading.Thread(target=thread_UART_write, daemon=True)
-    IS_SNIFFERING = 1
-
-    thread_1.start()
-    # thread_2.start()
-
-def stopSniffering():
-    global IS_SNIFFERING
-    IS_SNIFFERING = 0
-
-
-def addLog(string):
-    if(string == ''):
-        return
-    
-    win.receive_log_text.config(state="normal")
-    win.receive_log_text.insert(tk.END, string)
-    win.receive_log_text.config(state="disabled")
-
-
-def printLog(line, level=3):
-    if(line == ''):
-        return
-
-    win.receive_log_text.config(state="normal")
-
-    if(level == 0):
-        win.receive_log_text.insert(tk.END, "[ERR]  ")
-    elif(level == 1):
-        win.receive_log_text.insert(tk.END, "[WARN] ")
-    elif(level == 2):
-        win.receive_log_text.insert(tk.END, "[CAN]  ")
-    elif(level == 3):
-        win.receive_log_text.insert(tk.END, "[INFO] ")
-    else:
-        win.receive_log_text.insert(tk.END, "[SNIF] ")
-
-    win.receive_log_text.insert(tk.END, line + "\n")
-    win.receive_log_text.config(state="disabled")
-    win.receive_log_text.see(tk.END)
-
-
-def sendUART(line):
-    try:
-        serialPort.write(line.encode())
-    except Exception as e:
-        printLog("ECANパケットの送信に失敗しました。", LOG_LEVEL_ERR)
-        print(e)
-
+# ------ Send ------
 
 def sendPacket():
+    ism = -1
+    for i in range(3):
+        if(win.send_sendMode_pulldown.get() == send_sendMode_pulldown_selections[i]):
+            ism = send_sendMode_ism[i]
+
     line = []
 
     line.append("C")
     line.append("T")
     line.append(win.send_unitCode_entry.get()) # Unit code
     line.append(win.send_unitId_entry.get()) # Unit id
-    line.append(1) # isSendFromMain
+    line.append(ism) # isSendFromMain
 
     data = []
     data.append(win.send_data1_entry.get())
@@ -299,5 +274,58 @@ def sendPacket():
     for i in data:
         lineStr += str(i) + " "
 
-    sendUART(lineStr + "\n")
-    printLogCAN(lineStr)
+    try:
+        sendUART(lineStr + "\n")
+        printLogCAN(lineStr)
+    except:
+        printLog("ECANパケットの送信に失敗しました。", LOG_LEVEL_ERR)
+
+
+def onSendModeChange():
+    for i in range(3):
+        if(win.send_sendMode_pulldown.get() == send_sendMode_pulldown_selections[i]):
+            win.TLabel2.config(text=send_sendMode_addressText[i])
+            if(i == 2):
+                win.send_unitCode_entry["state"] = "disable"
+                win.send_unitId_entry["state"] = "disable"
+            else:
+                win.send_unitCode_entry["state"] = "enable"
+                win.send_unitId_entry["state"] = "enable"
+
+
+
+# ------ UART/CAN/Sniffering ------
+
+def sendUART(line):
+    try:
+        serialPort.write(line.encode())
+    except Exception as e:
+        printLog("ECANパケットの送信に失敗しました。", LOG_LEVEL_ERR)
+        print(e)
+
+
+def startSniffering():
+    global IS_SNIFFERING
+
+    thread_1 = threading.Thread(target=thread_UART_read, daemon=True)
+    IS_SNIFFERING = 1
+
+    thread_1.start()
+
+def stopSniffering():
+    global IS_SNIFFERING
+    IS_SNIFFERING = 0
+
+def thread_UART_read():
+    global serialPort, IS_SNIFFERING
+
+    while(IS_SNIFFERING):
+        if(serialPort != ''):
+            if serialPort.in_waiting > 0:
+                line = serialPort.readline().strip().decode("utf-8")
+                if line[0] == "C":
+                    printLogCAN(line)
+                else:
+                    printLog(line, -1)
+            else:
+                time.sleep(0.01)  # 少し待機

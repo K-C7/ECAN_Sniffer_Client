@@ -42,6 +42,9 @@ def changeWindowSubTitle(sub=None):
 def sendPacket():
     main.sendPacket()
 
+def onSendModeChange(event):
+    main.onSendModeChange()
+
 
 font_console = ""
 
@@ -355,6 +358,7 @@ class Toplevel1:
         self.send_sendMode_pulldown.configure(values=self.value_list)
         self.send_sendMode_pulldown.configure(textvariable=self.send_sendMode_var)
         self.send_sendMode_pulldown.configure(takefocus="")
+        self.send_sendMode_pulldown.bind("<<ComboboxSelected>>", onSendModeChange)
 
 
         self.send_clear_btn = ttk.Button(self.send_frame)
@@ -413,7 +417,7 @@ class Toplevel1:
         self.TLabel1.configure(compound='left')
 
         self.TLabel2 = ttk.Label(self.send_frame)
-        self.TLabel2.place(relx=0.041, rely=0.075, height=19, width=65
+        self.TLabel2.place(relx=0.041, rely=0.075, height=19, width=100
                 , bordermode='ignore')
         self.TLabel2.configure(font="-family {Yu Gothic UI} -size 9")
         self.TLabel2.configure(relief="flat")
