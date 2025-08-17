@@ -9,6 +9,7 @@ import sys
 import os
 import time
 import atexit
+import ctypes
 import threading
 import tkinter as tk
 import tkinter.ttk as ttk
